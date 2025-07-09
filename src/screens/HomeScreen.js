@@ -19,10 +19,10 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.mainContainer}>
       <Header user={user} />
-
-      <View style={styles.section}>
+      <ScrollView style={styles.container}>
+        <View style={styles.section}>
         <HouseholdBox
           user={user}
           householdData={{
@@ -70,11 +70,16 @@ export default function HomeScreen() {
           toggleDietGoal={() => {}}
         />
       </View>
-    </ScrollView>
+        </ScrollView>
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

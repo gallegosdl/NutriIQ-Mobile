@@ -34,9 +34,9 @@ export default function Header({ user, onLogout }) {
               <Text style={styles.avatarFallbackText}>?</Text>
             </View>
           )}
-          <View>
-            <Text style={styles.userLabel}>Logged in as</Text>
-            <Text style={styles.userName}>{user.name}</Text>
+          <View style={styles.userTextContainer}>
+            <Text style={styles.userLabel} numberOfLines={1}>Logged in as</Text>
+            <Text style={styles.userName} numberOfLines={1}>{user.name}</Text>
           </View>
         </Pressable>
       )}

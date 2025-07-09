@@ -17,6 +17,7 @@ export default StyleSheet.create({
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexShrink: 1,
   },
   logoImage: {
     width: 40,
@@ -37,6 +38,7 @@ export default StyleSheet.create({
   userContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexShrink: 1,
   },
   avatar: {
     width: 32,
@@ -56,6 +58,10 @@ export default StyleSheet.create({
   avatarFallbackText: {
     color: colors.textSecondary,
     fontSize: 16,
+  },
+  userTextContainer: {
+    flexShrink: 1,
+    minWidth: 0,
   },
   userLabel: {
     fontSize: 12,
