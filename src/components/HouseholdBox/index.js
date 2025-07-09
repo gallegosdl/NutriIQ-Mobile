@@ -3,13 +3,14 @@ import { View, Text, Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
 import styles from './styles';
 import { colors } from '../../theme/colors';
+import { commonStyles } from '../../theme/commonStyles';
 
 export default function HouseholdBox({ householdData, handleChange }) {
   // Provide defaults in case props are incomplete
   const { householdSize = 1, budget = 75, householdMembers = [] } = householdData || {};
 
   return (
-    <View style={styles.card}>
+    <View style={commonStyles.card}>
       <Text style={styles.heading}>
         Welcome, {householdMembers[0]?.name || 'Guest'}
       </Text>
@@ -24,8 +25,8 @@ export default function HouseholdBox({ householdData, handleChange }) {
           style={styles.button}
           onPress={() => {
             const newSize = Math.max(1, householdSize - 1);
-            handleChange('householdSize', newSize);
-            handleChange('householdMembers', householdMembers.slice(0, newSize));
+            //handleChange('householdSize', newSize);
+            //handleChange('householdMembers', householdMembers.slice(0, newSize));
           }}
         >
           <Text style={styles.buttonText}>-</Text>
@@ -34,11 +35,11 @@ export default function HouseholdBox({ householdData, handleChange }) {
           style={styles.button}
           onPress={() => {
             const newSize = householdSize + 1;
-            handleChange('householdSize', newSize);
-            handleChange('householdMembers', [
-              ...householdMembers,
-              { id: newSize, name: `Member ${newSize}`, photo: null },
-            ]);
+            //handleChange('householdSize', newSize);
+            //handleChange('householdMembers', [
+            //  ...householdMembers,
+            //  { id: newSize, name: `Member ${newSize}`, photo: null },
+            //]);
           }}
         >
           <Text style={styles.buttonText}>+</Text>
