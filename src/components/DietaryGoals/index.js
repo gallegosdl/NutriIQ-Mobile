@@ -1,14 +1,13 @@
-
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { commonStyles } from '../../theme/commonStyles';
 import styles from './styles';
 
-export default function DietaryGoals({
-  dietOptions,
-  dietGoals,
-  toggleDietGoal,
-}) {
+const DietaryGoals = React.memo(({ dietOptions, dietGoals, toggleDietGoal }) => {
+  const handleToggle = useCallback((goal) => {
+    toggleDietGoal && toggleDietGoal(goal);
+  }, [toggleDietGoal]);
+
   return (
     <View style={commonStyles.card}>
       <Text style={styles.title}>Dietary Goals</Text>
@@ -19,7 +18,7 @@ export default function DietaryGoals({
             {options.map((goal) => (
               <Pressable
                 key={goal}
-                onPress={() => toggleDietGoal && toggleDietGoal(goal)}
+                onPress={() => handleToggle(goal)}
                 style={[
                   styles.button,
                   dietGoals?.includes(goal)
@@ -42,4 +41,6 @@ export default function DietaryGoals({
       ))}
     </View>
   );
-}
+});
+
+export default DietaryGoals;

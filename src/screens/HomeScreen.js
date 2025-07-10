@@ -1,6 +1,6 @@
 // src/screens/HomeScreen.js
-import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import React, { useState, useMemo, useCallback } from 'react';
+import { View, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 
 import Header from '../components/Header';
 import HouseholdBox from '../components/HouseholdBox';
@@ -9,20 +9,41 @@ import MealPreferences from '../components/MealPreferences';
 import PreferredFoods from '../components/PreferredFoods';
 import AvoidedFoods from '../components/AvoidedFoods';
 import DietaryGoals from '../components/DietaryGoals';
+import ApiKeyInput from '../components/ApiKeyInput';
+import AppleAuthButton from '../components/AppleAuthButton';
+import CalendarMealPlan from '../components/CalendarMealPlan';
+import CuisinePreferences from '../components/CuisinePreferences';
 
-export default function HomeScreen() {
+import { yourMealPlanData } from '../data/mealPlanData';
+import { yourCuisineData } from '../data/cuisineData';
+
+const HomeScreen = React.memo(() => {
   const [user] = useState({ name: 'Darrell', avatar_url: null });
+  const [cuisinePreferences, setCuisinePreferences] = useState(yourCuisineData);
 
-  const preferences = {
+  const handleCuisineChange = useCallback((cuisine, value) => {
+    setCuisinePreferences(prev =>
+      prev.map(item =>
+        item.cuisine === cuisine ? { ...item, selected: value } : item
+      )
+    );
+  }, []);
+
+  const preferences = useMemo(() => ({
     likes: 'Chicken, Rice, Broccoli',
     dislikes: 'Mushrooms, Seafood',
-  };
+  }), []);
 
-  return (
-    <View style={styles.mainContainer}>
-      <Header user={user} />
-      <ScrollView style={styles.container}>
-        <View style={styles.section}>
+  /** Static header rendered outside the list items **/
+  const renderHeader = useCallback(() => (
+    <Header user={user} />
+  ), [user]);
+
+  /** Memoized sections for FlatList **/
+  const sections = useMemo(() => [
+    {
+      key: 'household',
+      Component: (
         <HouseholdBox
           user={user}
           householdData={{
@@ -32,34 +53,40 @@ export default function HomeScreen() {
           }}
           handleChange={() => {}}
         />
-      </View>
-
-      <View style={styles.section}>
+      ),
+    },
+    {
+      key: 'buildMealPlan',
+      Component: (
         <BuildMealPlanWithPantryButton
           isLoading={false}
           setIsPantryModalOpen={() => {}}
           handleBuildMealPlanWithPantry={() => {}}
           isBuildingWithPantry={false}
         />
-      </View>
-
-      <View style={styles.section}>
+      ),
+    },
+    {
+      key: 'mealPreferences',
+      Component: (
         <MealPreferences
           likes={preferences.likes}
           dislikes={preferences.dislikes}
           handleChange={() => {}}
         />
-      </View>
-
-      <View style={styles.section}>
-        <PreferredFoods likes={preferences.likes} />
-      </View>
-
-      <View style={styles.section}>
-        <AvoidedFoods dislikes={preferences.dislikes} />
-      </View>
-
-      <View style={styles.section}>
+      ),
+    },
+    {
+      key: 'preferredFoods',
+      Component: <PreferredFoods likes={preferences.likes} />,
+    },
+    {
+      key: 'avoidedFoods',
+      Component: <AvoidedFoods dislikes={preferences.dislikes} />,
+    },
+    {
+      key: 'dietaryGoals',
+      Component: (
         <DietaryGoals
           dietOptions={{
             "Diet Types": ["High-Protein", "Low-Carb", "Keto"],
@@ -69,23 +96,66 @@ export default function HomeScreen() {
           dietGoals={[]}
           toggleDietGoal={() => {}}
         />
-      </View>
-        </ScrollView>
-      </View>
+      ),
+    },
+    {
+      key: 'apiKeyInput',
+      Component: <ApiKeyInput />,
+    },
+    {
+      key: 'appleAuthButton',
+      Component: <AppleAuthButton />,
+    },
+    {
+      key: 'calendarMealPlan',
+      Component: <CalendarMealPlan mealPlan={yourMealPlanData} />,
+    },
+    {
+      key: 'cuisinePreferences',
+      Component: (
+        <CuisinePreferences
+          cuisinePreferences={cuisinePreferences}
+          handleCuisineChange={handleCuisineChange}
+        />
+      ),
+    },
+  ], [user, preferences, cuisinePreferences, handleCuisineChange]);
+
+  /** Render each section item **/
+  const renderItem = useCallback(({ item }) => (
+    <View style={styles.section}>
+      {item.Component}
+    </View>
+  ), []);
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <FlatList
+        data={sections}
+        keyExtractor={(item) => item.key}
+        renderItem={renderItem}
+        ListHeaderComponent={renderHeader}
+        contentContainerStyle={styles.contentContainer}
+        initialNumToRender={5}
+        windowSize={10}
+        removeClippedSubviews={true}
+      />
+    </SafeAreaView>
   );
-}
+});
+
+export default HomeScreen;
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  safeArea: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+  contentContainer: {
+    paddingVertical: 16,
   },
   section: {
-    marginVertical: 16,
+    marginVertical: 8,
     paddingHorizontal: 16,
   },
 });

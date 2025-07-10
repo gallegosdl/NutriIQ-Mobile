@@ -1,11 +1,14 @@
-// src/components/AvoidedFoods/index.js
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
-import { commonStyles } from '../../theme/commonStyles';  
+import { commonStyles } from '../../theme/commonStyles';
 
-export default function AvoidedFoods({ dislikes }) {
-  const items = dislikes ? dislikes.split(',').map((item) => item.trim()).filter(Boolean) : [];
+const AvoidedFoods = React.memo(({ dislikes }) => {
+  const items = useMemo(() => {
+    return dislikes
+      ? dislikes.split(',').map(item => item.trim()).filter(Boolean)
+      : [];
+  }, [dislikes]);
 
   return (
     <View style={commonStyles.card}>
@@ -18,9 +21,13 @@ export default function AvoidedFoods({ dislikes }) {
             </Text>
           ))
         ) : (
-          <Text style={styles.placeholder}>Enter avoided foods in Meal Preferences</Text>
+          <Text style={styles.placeholder}>
+            Enter avoided foods in Meal Preferences
+          </Text>
         )}
       </View>
     </View>
   );
-}
+});
+
+export default AvoidedFoods;

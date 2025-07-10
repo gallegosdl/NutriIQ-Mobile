@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
 import styles from './styles';
 import { colors } from '../../theme/colors';
 import { commonStyles } from '../../theme/commonStyles';
 
-export default function HouseholdBox({ householdData, handleChange }) {
-  // Provide defaults in case props are incomplete
-  const { householdSize = 1, budget = 75, householdMembers = [] } = householdData || {};
+const HouseholdBox = React.memo(({ householdData = {}, handleChange = () => {} }) => {
+  const {
+    householdSize = 1,
+    budget = 75,
+    householdMembers = [],
+  } = householdData;
+
+  const displayName = useMemo(() =>
+    householdMembers[0]?.name || 'Guest', [householdMembers]
+  );
 
   return (
     <View style={commonStyles.card}>
-      <Text style={styles.heading}>
-        Welcome, {householdMembers[0]?.name || 'Guest'}
-      </Text>
+      <Text style={styles.heading}>Welcome, {displayName}</Text>
 
       <View style={styles.row}>
         <Text style={styles.label}>Household Size:</Text>
@@ -25,8 +30,7 @@ export default function HouseholdBox({ householdData, handleChange }) {
           style={styles.button}
           onPress={() => {
             const newSize = Math.max(1, householdSize - 1);
-            //handleChange('householdSize', newSize);
-            //handleChange('householdMembers', householdMembers.slice(0, newSize));
+            handleChange('householdSize', newSize);
           }}
         >
           <Text style={styles.buttonText}>-</Text>
@@ -35,11 +39,7 @@ export default function HouseholdBox({ householdData, handleChange }) {
           style={styles.button}
           onPress={() => {
             const newSize = householdSize + 1;
-            //handleChange('householdSize', newSize);
-            //handleChange('householdMembers', [
-            //  ...householdMembers,
-            //  { id: newSize, name: `Member ${newSize}`, photo: null },
-            //]);
+            handleChange('householdSize', newSize);
           }}
         >
           <Text style={styles.buttonText}>+</Text>
@@ -62,4 +62,6 @@ export default function HouseholdBox({ householdData, handleChange }) {
       />
     </View>
   );
-}
+});
+
+export default HouseholdBox;

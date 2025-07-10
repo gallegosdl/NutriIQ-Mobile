@@ -1,34 +1,18 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import styles from './styles';
 
-export default function FitbitDisplay() {
-  // MOCK DATA
-  const data = {
+const FitbitDisplay = React.memo(() => {
+  const data = useMemo(() => ({
     displayName: 'Darrell Gallegos',
     memberSince: '2022-01-01',
     calories: 850,
     activities: [
-      {
-        type: 'Run',
-        distance: 5.2,
-        calories: 400,
-        duration: 45
-      },
-      {
-        type: 'Walk',
-        distance: 2.0,
-        calories: 150,
-        duration: 30
-      },
-      {
-        type: 'Workout',
-        distance: 0,
-        calories: 300,
-        duration: 60
-      }
-    ]
-  };
+      { type: 'Run', distance: 5.2, calories: 400, duration: 45 },
+      { type: 'Walk', distance: 2.0, calories: 150, duration: 30 },
+      { type: 'Workout', distance: 0, calories: 300, duration: 60 },
+    ],
+  }), []);
 
   return (
     <View style={styles.card}>
@@ -42,18 +26,14 @@ export default function FitbitDisplay() {
         {data.activities.map((activity, index) => (
           <View key={index} style={styles.activityCard}>
             <Text style={styles.activityType}>{activity.type}</Text>
-            <Text style={styles.activityDetail}>
-              Distance: {activity.distance} km
-            </Text>
-            <Text style={styles.activityDetail}>
-              Calories: {activity.calories} cal
-            </Text>
-            <Text style={styles.activityDetail}>
-              Duration: {activity.duration} min
-            </Text>
+            <Text style={styles.activityDetail}>Distance: {activity.distance} km</Text>
+            <Text style={styles.activityDetail}>Calories: {activity.calories} cal</Text>
+            <Text style={styles.activityDetail}>Duration: {activity.duration} min</Text>
           </View>
         ))}
       </ScrollView>
     </View>
   );
-}
+});
+
+export default FitbitDisplay;

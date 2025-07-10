@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, Image, Pressable, useColorScheme } from 'react-native';
 import styles from './styles';
 import { colors } from '../../theme/colors';
 
-export default function Header({ user, onLogout }) {
+const Header = React.memo(({ user, onLogout = () => {} }) => {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
-  const logoSource = isDark
-    ? require('../../../assets/images/NutriIQ-dark-preferred.png')
-    : require('../../../assets/images/NutriIQ-light-preferred.png');
+  const logoSource = useMemo(() =>
+    isDark
+      ? require('../../../assets/images/NutriIQ-dark-preferred.png')
+      : require('../../../assets/images/NutriIQ-light-preferred.png'),
+  [isDark]);
 
   return (
     <View style={[styles.container, { backgroundColor: isDark ? colors.background : colors.surface }]}>
       <View style={styles.logoContainer}>
         <Image source={logoSource} style={styles.logoImage} resizeMode="contain" />
         <View>
-          <Text style={[styles.title, { color: isDark ? colors.text : colors.text }]}>
+          <Text style={[styles.title, { color: colors.text }]}>
             Nutri <Text style={styles.titleAccent}>IQ</Text>
           </Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -42,4 +44,6 @@ export default function Header({ user, onLogout }) {
       )}
     </View>
   );
-}
+});
+
+export default Header;

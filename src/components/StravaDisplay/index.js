@@ -1,33 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import styles from './styles';
 
-export default function StravaDisplay() {
-  // MOCK DATA
-  const data = {
+const StravaDisplay = React.memo(() => {
+  const data = useMemo(() => ({
     displayName: 'Darrell Gallegos',
     memberSince: '2021-05-01',
     activities: [
-      {
-        type: 'Run',
-        distance: 8.3,
-        calories: 620,
-        duration: 52
-      },
-      {
-        type: 'Bike',
-        distance: 20.5,
-        calories: 750,
-        duration: 95
-      },
-      {
-        type: 'Walk',
-        distance: 3.0,
-        calories: 180,
-        duration: 40
-      }
-    ]
-  };
+      { type: 'Run', distance: 8.3, calories: 620, duration: 52 },
+      { type: 'Bike', distance: 20.5, calories: 750, duration: 95 },
+      { type: 'Walk', distance: 3.0, calories: 180, duration: 40 },
+    ],
+  }), []);
 
   return (
     <View style={styles.card}>
@@ -48,4 +32,6 @@ export default function StravaDisplay() {
       </ScrollView>
     </View>
   );
-}
+});
+
+export default StravaDisplay;
