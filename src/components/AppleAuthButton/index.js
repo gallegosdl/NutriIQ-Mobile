@@ -1,64 +1,54 @@
-// src/components/BuildMealPlanWithPantryButton/index.js
+// src/components/AppleAuthButton/index.js
 import React from 'react';
-import { View, Text, Pressable, ActivityIndicator, useColorScheme } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import styles from './styles';
+import { useColorScheme } from 'react-native';
 import { colors } from '../../theme/colors';
-import { commonStyles } from '../../theme/commonStyles';
 
+const AppleAuthButton = React.memo(({ onSuccess, onError, isLoading = false }) => {
+  const theme = useColorScheme();
+  const isDark = theme === 'dark';
 
-export default function BuildMealPlanWithPantryButton({
-  isLoading,
-  setIsPantryModalOpen,
-  handleBuildMealPlanWithPantry,
-  isBuildingWithPantry
-}) {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
+  const handleAppleLogin = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
 
-  const buttonColor = isDark ? colors.primaryDark : colors.primary;
-  const cardBg = isDark ? colors.surfaceDark : colors.surface;
+      console.log('[AppleAuthButton] Received credential:', credential);
+      onSuccess && onSuccess(credential);
+
+    } catch (error) {
+      if (error.code === 'ERR_CANCELED') {
+        console.log('[AppleAuthButton] User canceled Apple Sign-in');
+      } else {
+        console.error('[AppleAuthButton] Error:', error);
+        onError && onError(error);
+      }
+    }
+  };
 
   return (
-    <View style={[commonStyles.card, { backgroundColor: cardBg }]}>
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: isDark ? colors.textLight : colors.text }]}>
-          Plan with Pantry
-        </Text>
-        <Pressable
-          onPress={() => setIsPantryModalOpen(true)}
-          style={({ pressed }) => [
-            styles.openPantryButton,
-            { backgroundColor: pressed ? colors.secondary : buttonColor }
-          ]}
-        >
-          <Text style={styles.buttonText}>Open Pantry</Text>
-        </Pressable>
-      </View>
-
-      <Text style={[styles.description, { color: isDark ? colors.textSecondary : colors.text }]}>
-        🍽️ Manage your pantry items and generate meal plans with them as preferred ingredients.
-      </Text>
-
-      <Pressable
-        onPress={handleBuildMealPlanWithPantry}
-        disabled={isBuildingWithPantry || isLoading}
-        style={({ pressed }) => [
-          styles.buildButton,
-          { backgroundColor: pressed ? colors.secondary : buttonColor },
-          (isBuildingWithPantry || isLoading) && styles.disabledButton
-        ]}
-      >
-        {isBuildingWithPantry ? (
-          <>
-            <ActivityIndicator color="#fff" style={{ marginRight: 8 }} />
-            <Text style={styles.buttonText}>Building with Pantry...</Text>
-          </>
-        ) : (
-          <Text style={styles.buttonText}>
-            Build Meal Plan with Pantry Items
-          </Text>
-        )}
-      </Pressable>
+    <View style={styles.container}>
+      {isLoading ? (
+        <ActivityIndicator size="small" color={isDark ? colors.textLight : colors.text} />
+      ) : (
+        <AppleAuthentication.AppleAuthenticationButton
+          buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+          buttonStyle={isDark
+            ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE
+            : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+          cornerRadius={8}
+          style={styles.button}
+          onPress={handleAppleLogin}
+        />
+      )}
     </View>
   );
-}
+});
+
+export default AppleAuthButton;

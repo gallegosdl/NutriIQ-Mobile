@@ -1,3 +1,4 @@
+// src/theme/colors.js
 export const colors = {
   surface: '#252B3B',
   text: '#ffffff',
