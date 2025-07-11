@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, Dimensions, ActivityIndicator, Picker, Platform } from 'react-native';
 import styles from './styles';
-import { useColorScheme } from 'react-native';
+import { useIsDarkMode } from '../../contexts/ThemeContext';
 import { colors } from '../../theme/colors';
 import { LineChart } from 'react-native-chart-kit';
 
@@ -17,8 +17,7 @@ const DailyCaloriesChart = React.memo(({
   chartDataCalculation,
   activityCalories
 }) => {
-  const theme = useColorScheme();
-  const isDark = theme === 'dark';
+  const isDark = useIsDarkMode();
 
   const { totals: mealCalories = [], labels: mealLabels = [] } = chartDataCalculation;
 
@@ -48,8 +47,8 @@ const DailyCaloriesChart = React.memo(({
   }, [mealCalories, chartLabels, targetCalories, isDark]);
 
   const chartConfig = {
-    backgroundGradientFrom: isDark ? colors.surfaceDark : colors.surface,
-    backgroundGradientTo: isDark ? colors.surfaceDark : colors.surface,
+    backgroundGradientFrom: isDark ? colors.surfaceDark : '#ffffff',
+    backgroundGradientTo: isDark ? colors.surfaceDark : '#ffffff',
     decimalPlaces: 0,
     color: (opacity = 1) => isDark
       ? `rgba(255, 255, 255, ${opacity})`
@@ -68,7 +67,7 @@ const DailyCaloriesChart = React.memo(({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[{ backgroundColor: isDark ? colors.surfaceDark : '#ffffff' }]}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: isDark ? colors.textLight : colors.text }]}>
           Daily Calories
@@ -83,7 +82,7 @@ const DailyCaloriesChart = React.memo(({
         {Platform.OS === 'ios' ? (
           <Picker
             selectedValue={getCurrentGoal()}
-            style={styles.picker}
+            style={[styles.picker, { color: isDark ? colors.textLight : colors.text }]}
             onValueChange={handleGoalChange}
           >
             <Picker.Item label="Maintain" value="maintain" />
@@ -91,8 +90,8 @@ const DailyCaloriesChart = React.memo(({
             <Picker.Item label="Gain" value="gain" />
           </Picker>
         ) : (
-          <View style={styles.goalTextContainer}>
-            <Text style={styles.goalText}>{getCurrentGoal()}</Text>
+          <View style={[styles.goalTextContainer, { backgroundColor: isDark ? colors.surfaceDark : '#ffffff' }]}>
+            <Text style={[styles.goalText, { color: isDark ? colors.textLight : colors.text }]}>{getCurrentGoal()}</Text>
           </View>
         )}
       </View>

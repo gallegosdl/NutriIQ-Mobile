@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
-import styles from './styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import createStyles from './styles';
 import { colors } from '../../theme/colors';
-import { commonStyles } from '../../theme/commonStyles';
 
 const HouseholdBox = React.memo(({ householdData = {}, handleChange = () => {} }) => {
   const {
@@ -12,12 +12,17 @@ const HouseholdBox = React.memo(({ householdData = {}, handleChange = () => {} }
     householdMembers = [],
   } = householdData;
 
-  const displayName = useMemo(() =>
-    householdMembers[0]?.name || 'Guest', [householdMembers]
+  const displayName = useMemo(
+    () => householdMembers[0]?.name || 'Guest',
+    [householdMembers]
   );
 
+  const { themeMode } = useTheme();
+  const isDarkMode = themeMode === 'dark';
+  const styles = createStyles(isDarkMode);
+
   return (
-    <View style={commonStyles.card}>
+    <View>
       <Text style={styles.heading}>Welcome, {displayName}</Text>
 
       <View style={styles.row}>
@@ -28,19 +33,13 @@ const HouseholdBox = React.memo(({ householdData = {}, handleChange = () => {} }
       <View style={styles.buttonRow}>
         <Pressable
           style={styles.button}
-          onPress={() => {
-            const newSize = Math.max(1, householdSize - 1);
-            handleChange('householdSize', newSize);
-          }}
+          onPress={() => handleChange('householdSize', Math.max(1, householdSize - 1))}
         >
           <Text style={styles.buttonText}>-</Text>
         </Pressable>
         <Pressable
           style={styles.button}
-          onPress={() => {
-            const newSize = householdSize + 1;
-            handleChange('householdSize', newSize);
-          }}
+          onPress={() => handleChange('householdSize', householdSize + 1)}
         >
           <Text style={styles.buttonText}>+</Text>
         </Pressable>

@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { useColorScheme } from 'react-native';
 import styles from './styles';
-import { colors } from '@theme/colors';
+import { colors } from '../../theme/colors';
 
 const DailyCaloriesSummary = React.memo(({ calorieStats }) => {
   const theme = useColorScheme();

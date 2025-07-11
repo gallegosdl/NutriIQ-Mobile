@@ -1,3 +1,4 @@
+// src/components/AvoidedFoods/index.js
 import React, { useMemo } from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
@@ -11,7 +12,7 @@ const AvoidedFoods = React.memo(({ dislikes }) => {
   }, [dislikes]);
 
   return (
-    <View style={commonStyles.card}>
+    <View>
       <Text style={styles.title}>Avoided Foods</Text>
       <View style={styles.tagContainer}>
         {items.length > 0 ? (

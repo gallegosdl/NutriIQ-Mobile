@@ -1,8 +1,8 @@
+// components/DailyCalories/index.js
 import React, { useMemo, useEffect, useState, useCallback } from 'react';
 import { View, ScrollView } from 'react-native';
 import DailyCaloriesChart from '../DailyCaloriesChart';
 import DailyCaloriesSummary from '../DailyCaloriesSummary';
-import styles from './styles';
 
 const DailyCalories = React.memo(({
   formData = {},
@@ -62,8 +62,8 @@ const DailyCalories = React.memo(({
   }, [targetCalories]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.chartContainer}>
+    <ScrollView>
+      <View>
       <DailyCaloriesChart
         targetCalories={targetCalories}
         goals={goals}
@@ -73,7 +73,8 @@ const DailyCalories = React.memo(({
         activityCalories={activityCalories}
       />
       </View>
-      <View style={styles.summaryContainer}>
+      
+      <View>
         <DailyCaloriesSummary calorieStats={calorieStats} />
       </View>
     </ScrollView>

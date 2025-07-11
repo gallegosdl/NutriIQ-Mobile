@@ -1,3 +1,4 @@
+// src/components/Header/index.js
 import React, { useMemo } from 'react';
 import { View, Text, Image, Pressable, useColorScheme } from 'react-native';
 import styles from './styles';

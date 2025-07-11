@@ -15,7 +15,7 @@ const FitbitDisplay = React.memo(() => {
   }), []);
 
   return (
-    <View style={styles.card}>
+    <View>
       <Text style={styles.header}>🏃‍♂️ Fitbit Connected</Text>
       <Text style={styles.subheader}>Welcome, {data.displayName}</Text>
       <Text style={styles.meta}>Member Since: {data.memberSince}</Text>

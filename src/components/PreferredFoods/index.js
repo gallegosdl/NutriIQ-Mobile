@@ -1,3 +1,4 @@
+// src/components/PreferredFoods/index.js
 import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
@@ -7,7 +8,7 @@ export default function PreferredFoods({ likes }) {
   const items = likes ? likes.split(',').map((item) => item.trim()).filter(Boolean) : [];
 
   return (
-    <View style={commonStyles.card}>
+    <View>
       <Text style={styles.title}>Preferred Foods</Text>
       <View style={styles.tagContainer}>
         {items.length > 0 ? (

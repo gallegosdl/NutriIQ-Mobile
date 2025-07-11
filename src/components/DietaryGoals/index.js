@@ -1,3 +1,4 @@
+// src/components/DietaryGoals/index.js
 import React, { useCallback } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { commonStyles } from '../../theme/commonStyles';
@@ -9,8 +10,7 @@ const DietaryGoals = React.memo(({ dietOptions, dietGoals, toggleDietGoal }) => 
   }, [toggleDietGoal]);
 
   return (
-    <View style={commonStyles.card}>
-      <Text style={styles.title}>Dietary Goals</Text>
+    <View>
       {Object.entries(dietOptions || {}).map(([category, options]) => (
         <View key={category} style={styles.categoryContainer}>
           <Text style={styles.category}>{category}</Text>

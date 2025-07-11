@@ -1,3 +1,4 @@
+// src/components/MealPreferences/index.js
 import React from 'react';
 import { View, Text, TextInput } from 'react-native';
 import { commonStyles } from '../../theme/commonStyles';
@@ -5,8 +6,7 @@ import styles from './styles';
 
 export default function MealPreferences({ likes, dislikes, handleChange }) {
   return (
-    <View style={commonStyles.card}>
-      <Text style={styles.title}>Meal Preferences</Text>
+    <View>
       <Text style={styles.description}>
         Separate multiple foods with commas. This helps prioritize ingredients for meal planning.
       </Text>

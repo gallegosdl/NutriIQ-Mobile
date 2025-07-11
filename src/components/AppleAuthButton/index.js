@@ -5,6 +5,7 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import styles from './styles';
 import { useColorScheme } from 'react-native';
 import { colors } from '../../theme/colors';
+import { Platform } from 'react-native';
 
 const AppleAuthButton = React.memo(({ onSuccess, onError, isLoading = false }) => {
   const theme = useColorScheme();
@@ -37,6 +38,7 @@ const AppleAuthButton = React.memo(({ onSuccess, onError, isLoading = false }) =
       {isLoading ? (
         <ActivityIndicator size="small" color={isDark ? colors.textLight : colors.text} />
       ) : (
+        Platform.OS === 'ios' && (
         <AppleAuthentication.AppleAuthenticationButton
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
           buttonStyle={isDark
@@ -46,6 +48,7 @@ const AppleAuthButton = React.memo(({ onSuccess, onError, isLoading = false }) =
           style={styles.button}
           onPress={handleAppleLogin}
         />
+        )
       )}
     </View>
   );

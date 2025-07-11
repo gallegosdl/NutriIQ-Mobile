@@ -14,7 +14,7 @@ const StravaDisplay = React.memo(() => {
   }), []);
 
   return (
-    <View style={styles.card}>
+    <View>
       <Text style={styles.header}>🚴‍♂️ Strava Connected</Text>
       <Text style={styles.subheader}>Welcome, {data.displayName}</Text>
       <Text style={styles.meta}>Member Since: {data.memberSince}</Text>
